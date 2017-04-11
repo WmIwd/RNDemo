@@ -10,7 +10,8 @@ import {
     View,
     Image,
     ListView,
-    RefreshControl
+    RefreshControl,
+    TouchableOpacity
 } from 'react-native';
 import NavigationBar from '../component/NavigationBar';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -24,9 +25,29 @@ export default class PopularPage extends Component {
         };
     }
 
+    getNavLeftBtn = () => {
+        return <View></View>;
+    }
+
+    getNavRightBtn = () => {
+        return <View style={{flexDirection:'row',alignItems:'center',paddingRight: 8}}>
+            <TouchableOpacity
+                activeOpacity={0.7}>
+                <Image style={{width:24,height:24}}
+                       source={require('../../res/images/ic_search_white_48pt.png')}></Image>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                activeOpacity={0.7}>
+                <Image style={{width:24,height:24}}
+                       source={require('../../res/images/ic_more_vert_white_48pt.png')}></Image>
+            </TouchableOpacity>
+        </View>;
+    }
+
     render() {
         return <View style={styles.container}>
-            <NavigationBar/>
+            <NavigationBar title="热门" leftBtn={this.getNavLeftBtn()} rightBtn={this.getNavRightBtn()}/>
             <ScrollableTabView
                 tabBarBackgroundColor="#63B8FF"
                 tabBarActiveTextColor="#FFF"

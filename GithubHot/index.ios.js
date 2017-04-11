@@ -3,31 +3,12 @@
  * https://github.com/facebook/react-native
  * @flow
  */
-
 import React, {Component} from 'react';
 import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    View
+    AppRegistry
 } from 'react-native';
 
-import HomePage from './js/pages/HomePage';
+import setup from './js/pages/setup';
 
-export default class GithubHot extends Component {
-    render() {
-        return (
-            <View style={styles.container}>
-                <HomePage/>
-            </View>
-        );
-    }
-}
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    }
-});
-
-AppRegistry.registerComponent('GithubHot', () => GithubHot);
+AppRegistry.registerComponent('GithubHot', () => setup);
