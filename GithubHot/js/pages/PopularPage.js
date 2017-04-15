@@ -11,7 +11,8 @@ import {
     Image,
     ListView,
     RefreshControl,
-    TouchableOpacity
+    TouchableOpacity,
+    AsyncStorage
 } from 'react-native';
 import NavigationBar from '../component/NavigationBar';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -21,7 +22,13 @@ export default class PopularPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            languages: ['Android', 'IOS', 'Java', 'React', 'JS']
+            languages: [
+                {name: 'Android', checked: true},
+                {name: 'IOS', checked: true},
+                {name: 'React', checked: true},
+                {name: 'Java', checked: true},
+                {name: 'JS', checked: true}
+            ]
         };
     }
 
@@ -45,6 +52,16 @@ export default class PopularPage extends Component {
         </View>;
     }
 
+    //加载自定义标签
+    loadLanguages = () => {
+        AsyncStorage.getItem('custom_key')
+            .then(value => {
+                if (value !== null) {
+                    this.setState({languages: JSON.parse(value)});
+                }
+            })
+    }
+
     render() {
         return <View style={styles.container}>
             <NavigationBar title="热门" leftBtn={this.getNavLeftBtn()} rightBtn={this.getNavRightBtn()}/>
@@ -55,10 +72,15 @@ export default class PopularPage extends Component {
                 tabBarUnderlineStyle={{backgroundColor:"#E7E7E7",height:2}}
             >
                 {
-                    this.state.languages.map((item, i) => <PopularTab key={`tab${i}`} tabLabel={item}/>)
+                    this.state.languages.map((item, i) => item.checked === true ?
+                        <PopularTab key={`tab${i}`} tabLabel={item.name}/> : null)
                 }
             </ScrollableTabView>
         </View>;
+    }
+
+    componentDidMount() {
+        this.loadLanguages();
     }
 }
 
@@ -98,7 +120,7 @@ class PopularTab extends Component {
         </View>;
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
         this.loadData();
     }
 
