@@ -16,14 +16,14 @@ import CustomKeyPage from './CustomKeyPage';
 export default class MyPage extends Component {
     gotoCustomKey = () => {
         this.props.navigator.push({
-            component:CustomKeyPage
+            component: CustomKeyPage
         });
     }
 
     render() {
         return <View style={styles.container}>
             <NavigationBar title="我的"/>
-            <Text onPress={this.gotoCustomKey} n>my</Text>
+            <Text onPress={this.gotoCustomKey}>自定义分类</Text>
         </View>;
     }
 }

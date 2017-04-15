@@ -9,12 +9,14 @@ import {
     View,
     Image,
     TouchableOpacity,
-    AsyncStorage
+    AsyncStorage,
+    Alert
 } from 'react-native';
 
 import NavigationBar from '../../component/NavigationBar';
 import CheckBox from 'react-native-check-box';
 import Toast from "react-native-easy-toast";
+import ArrayUtils from '../../component/ArrayUtils';
 
 export default class CustomKeyPage extends Component {
     constructor(props) {
@@ -22,8 +24,8 @@ export default class CustomKeyPage extends Component {
         this.state = {
             data: [
                 {name: 'Android', checked: true},
-                {name: 'IOS', checked: false},
-                {name: 'React Native', checked: true},
+                {name: 'IOS', checked: true},
+                {name: 'React', checked: true},
                 {name: 'Java', checked: true},
                 {name: 'JS', checked: true}
             ]
@@ -31,12 +33,37 @@ export default class CustomKeyPage extends Component {
     }
 
     handleBack = () => {
-        this.props.navigator.pop();
+        this.doBack();
     }
     handleSave = () => {
-        console.log(JSON.stringify(this.state.data));
+        if (ArrayUtils.isAbsEqual(this.state.data, this.orignData)) {
+            this.doBack();
+        } else {
+            Alert.alert('提示', '是否需要保存？', [
+                {
+                    text: '是', onPress: () => {
+                    this.doSave()
+                }
+                },
+                {
+                    text: '否', onPress: () => {
+                    this.doBack()
+                }
+                }
+            ]);
+        }
+    }
+
+    doBack = () => {
+        this.props.navigator.pop();
+    }
+
+    doSave = () => {
         AsyncStorage.setItem('custom_key', JSON.stringify(this.state.data))
-            .then(() => this.refs.toast.show('保存成功'));
+            .then(() => {
+                this.refs.toast.show('保存成功');
+                this.doBack();
+            });
     }
     getNavLeftBtn = () => {
         return <View style={{flexDirection:'row',alignItems:'center',paddingLeft: 8}}>
@@ -99,9 +126,9 @@ export default class CustomKeyPage extends Component {
         AsyncStorage.getItem('custom_key')
             .then(value => {
                 if (value !== null) {
-                    console.log(value);
                     this.setState({data: JSON.parse(value)});
                 }
+                this.orignData = ArrayUtils.clone(this.state.data);
             })
     }
 }
