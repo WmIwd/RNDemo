@@ -30,7 +30,7 @@ export default class NavigationBar extends Component {
             </View>
             <View style={styles.navBar}>
                 {this.props.leftBtn}
-                <Text style={styles.title}>{this.props.title}</Text>
+                <Text style={styles.title} numberOfLines={1}>{this.props.title}</Text>
                 {this.props.rightBtn}
             </View>
         </View>;
@@ -47,17 +47,17 @@ const styles = StyleSheet.create({
         height: Platform.OS === 'ios' ? 20 : 0
     },
     navBar: {
-        height:24,
+        height: 24,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
     title: {
-        width:ScreenWidth-200,
+        width: ScreenWidth - 140,
         fontSize: 16,
         color: '#FFF',
-        textAlign:'center',
-        position:'absolute',
-        left:100
+        textAlign: 'center',
+        position: 'absolute',
+        left: 70
     }
 });

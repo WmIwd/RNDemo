@@ -17,7 +17,7 @@ export default function setup() {
     class Root extends Component {
         renderScene = (route, navigator) => {
             let Target = route.component;
-            return <Target navigator={navigator}/>;
+            return <Target {...route.params} navigator={navigator}/>;
         }
 
         render() {
