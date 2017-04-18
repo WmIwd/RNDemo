@@ -8,7 +8,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    DeviceEventEmitter
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
@@ -80,6 +81,20 @@ export default class HomePage extends Component {
                 </TabNavigator.Item>
             </TabNavigator>
         </View>;
+    }
+
+    //刷新homepage事件
+    componentDidMount() {
+        this.subscription = DeviceEventEmitter.addListener('home_page_refresh', (data) => {
+            //HomePage重新刷新
+            this.props.navigator.resetTo({
+                component: HomePage
+            });
+        });
+    }
+
+    componentWillUnmount() {
+        this.subscription.remove();
     }
 }
 

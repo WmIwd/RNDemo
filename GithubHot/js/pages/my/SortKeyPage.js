@@ -11,16 +11,20 @@ import {
     Image,
     TouchableOpacity,
     AsyncStorage,
-    TouchableHighlight
+    TouchableHighlight,
+    Alert,
+    DeviceEventEmitter
 } from 'react-native';
 import NavigationBar from '../../component/NavigationBar';
 import SortableListView from "react-native-sortable-listview";
 import Toast from "react-native-easy-toast";
+import ArrayUtils from '../../component/ArrayUtils';
 
 export default class SortKeyPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            originData: [],
             data: []
         }
     }
@@ -36,12 +40,45 @@ export default class SortKeyPage extends Component {
     }
 
     doSave = () => {
+        let originArray = this.state.originData;
+        let storedArray = this.state.data;
+        let savedArray = [];
+        for (let i = 0, j = 0; i < originArray.length; i++) {
+            let item = originArray[i];
+            if (!item.checked) {
+                savedArray[i] = item;
+            } else {
+                savedArray[i] = storedArray[j];
+                j++;
+            }
+        }
 
+        AsyncStorage.setItem('custom_key', JSON.stringify(savedArray))
+            .then(() => {
+                this.refs.toast.show('保存成功');
+                this.doBack();
+                DeviceEventEmitter.emit('home_page_refresh', 'HomePage重新加载');
+            });
     }
 
     //保存
     handleSave = () => {
-        this.doSave();
+        if (ArrayUtils.isAbsEqual(this.state.data, this.originData)) {
+            this.doBack();
+        } else {
+            Alert.alert('提示', '是否需要保存？', [
+                {
+                    text: '是', onPress: () => {
+                    this.doSave()
+                }
+                },
+                {
+                    text: '否', onPress: () => {
+                    this.doBack()
+                }
+                }
+            ]);
+        }
     }
 
     getNavLeftBtn = () => {
@@ -75,7 +112,6 @@ export default class SortKeyPage extends Component {
                 order={Object.keys(this.state.data)}
                 onRowMoved={e=>{
                     this.state.data.splice(e.to,0,this.state.data.splice(e.from,1)[0]);
-                    this.forceUpdate();
                 }}
                 renderRow={item=><RowComponent data={item}/>}
             />
@@ -87,12 +123,14 @@ export default class SortKeyPage extends Component {
         AsyncStorage.getItem('custom_key')
             .then(value => {
                 if (value !== null) {
+                    let orign = JSON.parse(value);
                     let result = [];
-                    JSON.parse(value).forEach(item => {
+                    orign.forEach(item => {
                         if (item.checked) result.push(item);
                     })
-                    this.setState({data: result});
+                    this.setState({originData: orign, data: result});
                 }
+                this.originData = ArrayUtils.clone(this.state.data);
             })
     }
 }

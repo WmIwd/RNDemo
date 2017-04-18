@@ -10,7 +10,8 @@ import {
     Image,
     TouchableOpacity,
     AsyncStorage,
-    Alert
+    Alert,
+    DeviceEventEmitter
 } from 'react-native';
 
 import NavigationBar from '../../component/NavigationBar';
@@ -63,6 +64,7 @@ export default class CustomKeyPage extends Component {
             .then(() => {
                 this.refs.toast.show('保存成功');
                 this.doBack();
+                DeviceEventEmitter.emit('home_page_refresh', 'HomePage重新加载');
             });
     }
     getNavLeftBtn = () => {
