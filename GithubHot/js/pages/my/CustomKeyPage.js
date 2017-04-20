@@ -19,17 +19,13 @@ import CheckBox from 'react-native-check-box';
 import Toast from "react-native-easy-toast";
 import ArrayUtils from '../../component/ArrayUtils';
 
+var popular_def_lans = require('../../../res/data/popular_def_lans.json');
+
 export default class CustomKeyPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: [
-                {name: 'Android', checked: true},
-                {name: 'IOS', checked: true},
-                {name: 'React', checked: true},
-                {name: 'Java', checked: true},
-                {name: 'JS', checked: true}
-            ]
+            data: popular_def_lans
         }
     }
 

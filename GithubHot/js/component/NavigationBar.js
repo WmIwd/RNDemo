@@ -20,8 +20,19 @@ var ScreenWidth = Dimensions.get('window').width;
 export default class NavigationBar extends Component {
     static propTypes = {
         leftBtn: PropTypes.element,
-        rightBtn: PropTypes.element
+        rightBtn: PropTypes.element,
+        titleView: PropTypes.element
     }
+
+    static defaultProps = {
+        title: ''
+    }
+
+    renderTitle = () => {
+        return this.props.title.length > 0 ?
+            <Text style={styles.title} numberOfLines={1}>{this.props.title}</Text> : this.props.titleView;
+    }
+
 
     render() {
         return <View style={styles.container}>
@@ -30,7 +41,7 @@ export default class NavigationBar extends Component {
             </View>
             <View style={styles.navBar}>
                 {this.props.leftBtn}
-                <Text style={styles.title} numberOfLines={1}>{this.props.title}</Text>
+                {this.renderTitle()}
                 {this.props.rightBtn}
             </View>
         </View>;

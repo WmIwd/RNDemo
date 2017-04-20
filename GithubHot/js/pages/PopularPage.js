@@ -16,20 +16,16 @@ import {
 } from 'react-native';
 import NavigationBar from '../component/NavigationBar';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import ProjectRow from '../component/ProjectRow';
+import ProjectRow from '../component/PopularProjectRow';
 import ProjectDetails from './ProjectDetails';
+
+var popular_def_lans = require('../../res/data/popular_def_lans.json');
 
 export default class PopularPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            languages: [
-                {name: 'Android', checked: true},
-                {name: 'IOS', checked: true},
-                {name: 'React', checked: true},
-                {name: 'Java', checked: true},
-                {name: 'JS', checked: true}
-            ]
+            languages: popular_def_lans
         };
     }
 
