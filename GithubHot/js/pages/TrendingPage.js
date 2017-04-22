@@ -17,11 +17,18 @@ import GitHubTrending from 'GitHubTrending';
 import TrendingProjectRow from '../component/TrendingProjectRow';
 import ProjectDetails from './ProjectDetails';
 import Popover from "../component/Popover";
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 
 var Dimensions = require('Dimensions');
 var ScreenWidth = Dimensions.get('window').width;
 var popular_def_lans = require('../../res/data/popular_def_lans.json');
+
+const TIME_MAP = new Map([
+    ['今 天', 'since=daily'],
+    ['本 周', 'since=weekly'],
+    ['本 月', 'since=monthly']
+]);
 
 export default class TrendingPage extends Component {
     constructor(props) {
@@ -30,7 +37,7 @@ export default class TrendingPage extends Component {
             languages: popular_def_lans,
             isVisible: false,
             buttonRect: [],
-            currentTab: popular_def_lans[0].name
+            currentTime: {key: '今 天', value: 'since=daily'}
         }
     }
 
@@ -53,30 +60,28 @@ export default class TrendingPage extends Component {
             activeOpacity={0.5}
             onPress={this.showPopover}>
             <View style={{flexDirection:'row',alignItems:'center',width:ScreenWidth,justifyContent:'center'}}>
-                <Text style={{color:'#FFF',fontSize:16}}>趋势</Text>
+                <Text style={{color:'#FFF',fontSize:16}}>趋势 {this.state.currentTime.key}</Text>
                 <Image source={require('../../res/images/ic_spinner_triangle.png')}
                        style={{width:12,height:12,marginLeft:5}}/>
             </View>
         </TouchableOpacity>;
     }
 
-    selectPopover = (item) => {
-        console.log(item.name);
-        this.setState({currentTab: item.name});
+    selectPopover = (key, value) => {
+        // console.log(item.name);
+        this.setState({currentTime: {key, value}});
+        this.closePopover();
     }
 
     renderPopover = () => {
         let views = [];
-        for (let i = 0; i < this.state.languages.length; i++) {
-            let item = this.state.languages[i];
-            if (item.checked) {
-                views.push(<TouchableOpacity
-                    key={`popover_${i}`}
-                    activeOpacity={0.5}
-                    onPress={()=>{this.selectPopover(item)}}>
-                    <Text style={styles.text}>{item.name}</Text>
-                </TouchableOpacity>);
-            }
+        for (let [key, value] of TIME_MAP) {
+            views.push(<TouchableOpacity
+                key={`popover_${value}`}
+                activeOpacity={0.5}
+                onPress={()=>{this.selectPopover(key,value)}}>
+                <Text style={styles.text}>{key}</Text>
+            </TouchableOpacity>);
         }
         return <View style={{alignItems:'center',paddingHorizontal:10}}>
             {views}
@@ -86,11 +91,23 @@ export default class TrendingPage extends Component {
     render() {
         return <View style={styles.container}>
             <NavigationBar titleView={this.getTitleView()}/>
-            <TrendingTab {...this.props} tabLabel={this.state.currentTab}/>
+            <ScrollableTabView
+                tabBarBackgroundColor="#63B8FF"
+                tabBarActiveTextColor="#FFF"
+                tabBarInactiveTextColor="#F5FFFA"
+                tabBarUnderlineStyle={{backgroundColor:"#E7E7E7",height:2}}
+            >
+                {
+                    this.state.languages.map((item, i) => item.checked === true ?
+                        <TrendingTab {...this.props} key={`tab${i}`} tabLabel={item.name}
+                                                     time={this.state.currentTime.value}/> : null)
+                }
+            </ScrollableTabView>
             <Popover
                 isVisible={this.state.isVisible}
                 fromRect={this.state.buttonRect}
                 onClose={this.closePopover}
+                contentStyle={{backgroundColor:'#343434',opacity:0.8}}
             >
                 {this.renderPopover()}
             </Popover>
@@ -100,7 +117,8 @@ export default class TrendingPage extends Component {
 
 class TrendingTab extends Component {
     static defaultProps = {
-        tabLabel: popular_def_lans[0].name
+        tabLabel: popular_def_lans[0].name,
+        time: 'since=daily'
     }
 
     handleProjectSelect = (obj) => {
@@ -142,12 +160,12 @@ class TrendingTab extends Component {
     }
 
     componentDidMount() {
-        this.loadData();
+        this.loadData(this.state.time);
     }
 
-    loadData = () => {
+    loadData = (time) => {
         this.setState({isLoading: true});
-        new GitHubTrending().fetchTrending(`https://github.com/trending/${this.props.tabLabel}?since=daily`)
+        new GitHubTrending().fetchTrending(`https://github.com/trending/${this.props.tabLabel}?${time}`)
             .then(value => {
                 //更新dataSource
                 this.setState({
@@ -157,6 +175,12 @@ class TrendingTab extends Component {
             }).catch((error) => {
             console.error(error);
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.time != this.props.time) {
+            this.loadData(nextProps.time);
+        }
     }
 }
 
