@@ -18,6 +18,7 @@ import TrendingProjectRow from '../component/TrendingProjectRow';
 import ProjectDetails from './ProjectDetails';
 import Popover from "../component/Popover";
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import MoreMenu from '../../js/component/MoreMenu';
 
 
 var Dimensions = require('Dimensions');
@@ -56,16 +57,29 @@ export default class TrendingPage extends Component {
 
     getTitleView = () => {
         return <TouchableOpacity
-            ref="button"
             activeOpacity={0.5}
             onPress={this.showPopover}>
-            <View style={{flexDirection:'row',alignItems:'center',width:ScreenWidth,justifyContent:'center'}}>
+            <View ref="button"
+                  style={{flexDirection:'row',alignItems:'center',width:ScreenWidth-140,justifyContent:'center',marginLeft:70}}>
                 <Text style={{color:'#FFF',fontSize:16}}>趋势 {this.state.currentTime.key}</Text>
                 <Image source={require('../../res/images/ic_spinner_triangle.png')}
                        style={{width:12,height:12,marginLeft:5}}/>
             </View>
         </TouchableOpacity>;
     }
+
+    getNavRightBtn = () => {
+        return <View ref="moreMenuButton">
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={()=>this.refs.moreMenu.showPopover(this.refs.moreMenuButton)}>
+                <Image style={{width:24,height:24,margin:8}}
+                       source={require('../../res/images/ic_more_vert_white_48pt.png')}></Image>
+            </TouchableOpacity>
+        </View>
+
+    }
+
 
     selectPopover = (key, value) => {
         // console.log(item.name);
@@ -90,7 +104,7 @@ export default class TrendingPage extends Component {
 
     render() {
         return <View style={styles.container}>
-            <NavigationBar titleView={this.getTitleView()}/>
+            <NavigationBar titleView={this.getTitleView()} rightBtn={this.getNavRightBtn()}/>
             <ScrollableTabView
                 tabBarBackgroundColor="#63B8FF"
                 tabBarActiveTextColor="#FFF"
@@ -107,10 +121,12 @@ export default class TrendingPage extends Component {
                 isVisible={this.state.isVisible}
                 fromRect={this.state.buttonRect}
                 onClose={this.closePopover}
+                placement="bottom"
                 contentStyle={{backgroundColor:'#343434',opacity:0.8}}
             >
                 {this.renderPopover()}
             </Popover>
+            <MoreMenu ref="moreMenu"/>
         </View>;
     }
 }
