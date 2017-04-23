@@ -7,8 +7,9 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
-} from 'react-native';
+    Image,
+    DeviceEventEmitter
+}from'react-native';
 
 import NavigationBar from '../../component/NavigationBar';
 import CustomKeyPage from './CustomKeyPage';

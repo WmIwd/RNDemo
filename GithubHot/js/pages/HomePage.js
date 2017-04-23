@@ -17,6 +17,7 @@ import PopularPage from './PopularPage';
 import MyPage from './my/MyPage';
 import TrendingPage from './TrendingPage';
 import SplashScreen from 'react-native-splash-screen';
+import FavoritePage from './FavoritePage';
 
 export default class HomePage extends Component {
     constructor(props) {
@@ -66,7 +67,7 @@ export default class HomePage extends Component {
                                source={require('../../res/images/ic_favorite.png')}/>}
                     onPress={() => this.setState({selectedTab: 'favorite'})}
                 >
-                    <View style={{backgroundColor: '#f00', flex: 1}}></View>
+                    <FavoritePage {...this.props}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                     selected={this.state.selectedTab === 'my'}

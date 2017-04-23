@@ -17,7 +17,7 @@ import {
 import NavigationBar from '../../component/NavigationBar';
 import CheckBox from 'react-native-check-box';
 import Toast from "react-native-easy-toast";
-import ArrayUtils from '../../component/ArrayUtils';
+import ArrayUtils from '../../component/utils/ArrayUtils';
 
 var popular_def_lans = require('../../../res/data/popular_def_lans.json');
 

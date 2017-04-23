@@ -18,7 +18,7 @@ import {
 import NavigationBar from '../../component/NavigationBar';
 import SortableListView from "react-native-sortable-listview";
 import Toast from "react-native-easy-toast";
-import ArrayUtils from '../../component/ArrayUtils';
+import ArrayUtils from '../../component/utils/ArrayUtils';
 
 var popular_def_lans = require('../../../res/data/popular_def_lans.json');
 
@@ -56,7 +56,8 @@ export default class SortKeyPage extends Component {
         }
 
         AsyncStorage.setItem('custom_key', JSON.stringify(savedArray))
-            .then(() => {
+            .then((value) => {
+                console.log(value);
                 this.refs.toast.show('保存成功');
                 this.doBack();
                 DeviceEventEmitter.emit('home_page_refresh', 'HomePage重新加载');
@@ -131,6 +132,8 @@ export default class SortKeyPage extends Component {
                         if (item.checked) result.push(item);
                     })
                     this.setState({originData: orign, data: result});
+                }else {
+                    this.setState({data: this.state.originData});
                 }
                 this.originData = ArrayUtils.clone(this.state.data);
             })

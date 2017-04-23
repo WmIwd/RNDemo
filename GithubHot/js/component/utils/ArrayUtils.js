@@ -25,4 +25,18 @@ export default class ArrayUtils {
             return obj;
         });
     }
+
+    /**
+     * 删除数组某个元素
+     * @param array
+     * @param item
+     */
+    static removeItem(array, item) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].url === item.url) {
+                array.splice(i, 1);
+                break;
+            }
+        }
+    }
 }

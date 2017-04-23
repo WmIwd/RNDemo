@@ -12,11 +12,12 @@ import {
     ListView,
     RefreshControl,
     TouchableOpacity,
-    AsyncStorage
+    AsyncStorage,
+    DeviceEventEmitter
 } from 'react-native';
 import NavigationBar from '../component/NavigationBar';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import ProjectRow from '../component/PopularProjectRow';
+import ProjectRow from '../component/listViewRow/PopularProjectRow';
 import ProjectDetails from './ProjectDetails';
 
 var popular_def_lans = require('../../res/data/popular_def_lans.json');

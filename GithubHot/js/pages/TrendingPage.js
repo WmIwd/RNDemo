@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import NavigationBar from '../component/NavigationBar';
 import GitHubTrending from 'GitHubTrending';
-import TrendingProjectRow from '../component/TrendingProjectRow';
+import TrendingProjectRow from '../component/listViewRow/TrendingProjectRow';
 import ProjectDetails from './ProjectDetails';
 import Popover from "../component/Popover";
 import ScrollableTabView from 'react-native-scrollable-tab-view';
