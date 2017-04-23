@@ -16,6 +16,7 @@ import TabNavigator from 'react-native-tab-navigator';
 import PopularPage from './PopularPage';
 import MyPage from './my/MyPage';
 import TrendingPage from './TrendingPage';
+import SplashScreen from 'react-native-splash-screen';
 
 export default class HomePage extends Component {
     constructor(props) {
@@ -86,6 +87,7 @@ export default class HomePage extends Component {
 
     //刷新homepage事件
     componentDidMount() {
+        SplashScreen.hide();
         this.subscription = DeviceEventEmitter.addListener('home_page_refresh', (data) => {
             //HomePage重新刷新
             this.props.navigator.resetTo({
