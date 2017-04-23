@@ -10,7 +10,8 @@ import {
     Image,
     ListView,
     RefreshControl,
-    TouchableOpacity
+    TouchableOpacity,
+    AsyncStorage
 } from 'react-native';
 import NavigationBar from '../component/NavigationBar';
 import GitHubTrending from 'GitHubTrending';
@@ -100,6 +101,15 @@ export default class TrendingPage extends Component {
         return <View style={{alignItems:'center',paddingHorizontal:10}}>
             {views}
         </View>;
+    }
+
+    componentWillMount(){
+        AsyncStorage.getItem('custom_key')
+            .then(value => {
+                if (value !== null) {
+                    this.setState({languages: JSON.parse(value)});
+                }
+            })
     }
 
     render() {
